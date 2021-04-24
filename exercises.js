@@ -63,3 +63,108 @@ let Maiar = lotr.get("Maiar")
 // 8: 17
 
 
+// 4. remove duplicates
+function remDup(str) {
+    let temp = new hashmap
+    temp.MAX_LOAD_RATIO = 0.5
+    temp.SIZE_RATIO = 3
+
+    for (let i = 0; i < str.length; i++) {
+        temp.set(str[i],str[i])
+    }
+
+    let out = '';
+    for (let i = 0; i < temp._capacity; i++) {
+        if (temp._hashTable[i]) {
+            out += temp._hashTable[i]['key']
+        };
+    }
+    return out
+}
+
+//console.log(remDup('google'));
+
+
+// 5. any permutation a palindrome
+
+function perm(str) {
+    let temp = new hashmap
+    for (let i = 0; i < str.length; i++) {
+
+        const index = temp._findSlot(str[i]);
+        if (temp._hashTable[index] === undefined) {
+            temp.set(str[i], 1)
+        } else {
+            temp.set(str[i], temp.get(str[i]) + 1)
+        }
+    }
+
+    let out = '';
+    for (let i = 0; i < temp._capacity; i++) {
+        if (temp._hashTable[i]) {
+            out += temp._hashTable[i]['value']
+        };
+    }
+
+    let count = 0;
+    for (let i = 0; i < out.length; i++) {
+        if (out[i] % 2 != 0 ) {
+            count += 1;
+        };
+    }
+    
+    if (count > 1) {
+        return 'no permutations are palindromes'
+    } else {
+        return 'a permutation is a palindrome'
+    }
+
+}
+
+//console.log(perm('racecar'));
+
+// 6. anagram grouping
+
+function ana(arr) {
+    let temp = [];
+    for (let i = 0; i < arr.length; i++) {
+        let hash = new hashmap
+        temp.MAX_LOAD_RATIO = 0.5
+        temp.SIZE_RATIO = 3
+    
+        for (let j = 0; j < arr[i].length; j++) {
+            let index = hash._findSlot(arr[i][j]);
+            if (hash._hashTable[index] === undefined) {
+                hash.set(arr[i][j], 1)
+            } else {
+                hash.set(arr[i][j], hash.get(arr[i][j] + 1))
+            }
+        }
+
+        temp.push([arr[i], hash])
+    }
+
+    let out = []
+    
+    for (let i = 0; i < temp.length; i++) {
+        let out1 = []
+        if (temp[i][1]) {
+            out1.push(temp[i][0])
+        }
+        for (let j = 0; j < temp.length; j++) {
+            if (i != j) {
+                if (JSON.stringify(temp[i][1]) == JSON.stringify(temp[j][1])) {
+                    out1.push(temp[j][0])
+                    temp[j] = [0,0]
+                }
+            }
+        
+        }
+        if (out1[0] != 0) {
+            out.push(out1)
+        }
+    }
+    return out
+}
+
+console.log(ana(['east', 'cars', 'acre', 'arcs', 'teas', 'eats', 'race']))
